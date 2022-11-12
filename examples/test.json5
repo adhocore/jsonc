@@ -1,0 +1,17 @@
+{
+	// this is line comment
+	"a": [
+		"b",
+	/* multi line
+	comment */
+		123,
+		"// not comment",
+	],
+	"d": {
+		"e": /* creepy comment */true,
+		"f": false,
+	},
+	"g": "/*comment*/{\"i\":1,\"url\":\"http://foo.bar\"}//comment",
+	"h": "literal
+	new line",
+}
