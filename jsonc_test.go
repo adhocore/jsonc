@@ -95,7 +95,7 @@ func testcases() map[string]Case {
 			 */
 			"b":2, "c":3,}`,
 			expect: `{"a":1,
-			
+			` + `
 			"b":2, "c":3}`,
 		},
 		"inline multiline comment": {
@@ -140,7 +140,7 @@ func testcases() map[string]Case {
 			expect: `{
 				"jo": "{/* comment */\"url\": \"http://example.com\"//comment\n\t\t\t\t}",
 				"x": {
-				
+				` + `
 					"y": {
 						"XY\\": "//no comment/*"
 					}
