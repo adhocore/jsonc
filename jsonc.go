@@ -7,6 +7,7 @@ import (
 	"unicode"
 )
 
+// Jsonc is the structure for parsing json with comments
 type Jsonc struct {
 	comment  int
 	commaPos int
@@ -15,10 +16,12 @@ type Jsonc struct {
 	len      int
 }
 
+// New creates Jsonc struct with proper defaults
 func New() *Jsonc {
 	return &Jsonc{0, -1, false, 0, 0}
 }
 
+// Strip strips comments and trailing commas from input byte array
 func (j *Jsonc) Strip(jsonb []byte) []byte {
 	s := j.StripS(string(jsonb))
 	return []byte(s)
@@ -26,6 +29,7 @@ func (j *Jsonc) Strip(jsonb []byte) []byte {
 
 var crlf = map[string]string{"\n": `\n`, "\t": `\t`, "\r": `\r`}
 
+// StripS strips comments and trailing commas from input string
 func (j *Jsonc) StripS(data string) string {
 	var oldprev, prev, char, next, s string
 
@@ -59,10 +63,12 @@ func (j *Jsonc) StripS(data string) string {
 	return s
 }
 
+// Unmarshal strips and parses the json byte array
 func (j *Jsonc) Unmarshal(jsonb []byte, v interface{}) error {
 	return json.Unmarshal(j.Strip(jsonb), v)
 }
 
+// UnmarshalFile strips and parses the json content from file
 func (j *Jsonc) UnmarshalFile(file string, v interface{}) error {
 	jsonb, err := ioutil.ReadFile(file)
 	if err != nil {
