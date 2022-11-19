@@ -1,6 +1,7 @@
 package jsonc
 
 import (
+	"os"
 	"strings"
 	"testing"
 )
@@ -34,29 +35,53 @@ func TestUnmarshal(t *testing.T) {
 		t.Run("Unmarshal "+name, func(t *testing.T) {
 			var ref map[string]interface{}
 			if err := j.Unmarshal([]byte(test.json), &ref); err != nil {
-				t.Errorf("[%s] unmarshal should not error, got %v", name, err)
+				t.Errorf("[%s] unmarshal should not error, got %#v", name, err)
 			}
 			if name == "nested subjson" {
 				jo := ref["jo"].(string)
 				if err := j.Unmarshal([]byte(jo), &ref); err != nil {
-					t.Errorf("[%v] unmarshal should not error, got %v", jo, err)
+					t.Errorf("[%v] unmarshal should not error, got %#v", jo, err)
 				}
 			}
 		})
 	}
 
 	t.Run("UnmarshalFile", func(t *testing.T) {
-		var ref map[string]interface{}
-		if err := j.UnmarshalFile("./examples/test.json5", &ref); err != nil {
-			t.Errorf("UnmarshalFile should not error, got %v", err)
+		files := []string{"chromium.json5", "test1.json5", "test.json5"}
+		for _, file := range files {
+			t.Run(file, func(t *testing.T) {
+				var ref map[string]interface{}
+				if err := j.UnmarshalFile("./examples/"+file, &ref); err != nil {
+					t.Errorf("UnmarshalFile should not error, got %#v", err)
+				}
+				if file != "test.json5" {
+					return
+				}
+				s := ref["g"]
+				if err := j.Unmarshal([]byte(s.(string)), &ref); err != nil {
+					t.Errorf("[%v] unmarshal should not error, got %#v", s, err)
+				}
+				if err := j.UnmarshalFile("./examples/invalid.json5", &ref); err == nil {
+					t.Error("invalid file should error, got none")
+				}
+			})
 		}
-		s := ref["g"]
-		if err := j.Unmarshal([]byte(s.(string)), &ref); err != nil {
-			t.Errorf("[%v] unmarshal should not error, got %v", s, err)
+	})
+}
+
+func TestCachedDecoder(t *testing.T) {
+	file := "./examples/test1.json5"
+	cd, val := CachedDecoder(), make(map[string]interface{})
+	t.Run("before cache", func(t *testing.T) {
+		os.Remove("./examples/test1.cached.json")
+		if err := cd.Decode(file, &val); err != nil {
+			t.Errorf("[%v] decode should not error, got %#v", file, err)
 		}
-		if err := j.UnmarshalFile("./examples/invalid.json5", &ref); err == nil {
-			t.Error("invalid file should error, got none")
-		}
+		t.Run("after cache", func(t *testing.T) {
+			if err := cd.Decode(file, &val); err != nil {
+				t.Errorf("[%v] decode should not error, got %#v", file, err)
+			}
+		})
 	})
 }
 
