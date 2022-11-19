@@ -170,7 +170,7 @@ import (
 )
 
 var dest map[string]interface{}
-err := jsonc.CachedDecoder().Decode("./examples/test.json5", &dest);
+err := jsonc.NewCachedDecoder().Decode("./examples/test.json5", &dest);
 if err != nil {
     fmt.Printf("%+v", err)
 } else {

@@ -71,7 +71,7 @@ func TestUnmarshal(t *testing.T) {
 
 func TestCachedDecoder(t *testing.T) {
 	file := "./examples/test1.json5"
-	cd, val := CachedDecoder(), make(map[string]interface{})
+	cd, val := NewCachedDecoder(), make(map[string]interface{})
 	t.Run("before cache", func(t *testing.T) {
 		os.Remove("./examples/test1.cached.json")
 		if err := cd.Decode(file, &val); err != nil {

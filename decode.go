@@ -8,19 +8,20 @@ import (
 	"strings"
 )
 
-type cachedDecoder struct {
+// CachedDecoder is a managed decoder that caches a copy of json5 transitioned to json
+type CachedDecoder struct {
 	jsonc *Jsonc
 	ext   string
 }
 
-// CachedDecoder gives a managed decoder that caches a copy of json5 transitioned to json
-func CachedDecoder(ext ...string) *cachedDecoder {
+// NewCachedDecoder gives a cached decoder
+func NewCachedDecoder(ext ...string) *CachedDecoder {
 	ext = append(ext, ".cached.json")
-	return &cachedDecoder{New(), ext[0]}
+	return &CachedDecoder{New(), ext[0]}
 }
 
 // Decode decodes from cache if exists and relevant else decodes from source
-func (fd *cachedDecoder) Decode(file string, v interface{}) error {
+func (fd *CachedDecoder) Decode(file string, v interface{}) error {
 	stat, err := os.Stat(file)
 	if err != nil {
 		return err

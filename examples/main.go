@@ -14,7 +14,7 @@ func main() {
 	j := jsonc.New()
 
 	// strip and unmarshal from cached file
-	if err := jsonc.CachedDecoder().Decode("./examples/test.json5", &v); err != nil {
+	if err := jsonc.NewCachedDecoder().Decode("./examples/test.json5", &v); err != nil {
 		fmt.Printf("%#v\n", err)
 		os.Exit(1)
 	}
