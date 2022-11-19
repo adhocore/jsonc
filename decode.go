@@ -13,11 +13,13 @@ type cachedDecoder struct {
 	ext   string
 }
 
+// CachedDecoder gives a managed decoder that caches a copy of json5 transitioned to json
 func CachedDecoder(ext ...string) *cachedDecoder {
 	ext = append(ext, ".cached.json")
 	return &cachedDecoder{New(), ext[0]}
 }
 
+// Decode decodes from cache if exists and relevant else decodes from source
 func (fd *cachedDecoder) Decode(file string, v interface{}) error {
 	stat, err := os.Stat(file)
 	if err != nil {
@@ -32,7 +34,7 @@ func (fd *cachedDecoder) Decode(file string, v interface{}) error {
 	}
 
 	// Update if not exist, or source file modified
-	update := !exist || stat.ModTime().UnixMilli() != cstat.ModTime().UnixMilli()
+	update := !exist || stat.ModTime() != cstat.ModTime()
 	if !update {
 		jsonb, _ := ioutil.ReadFile(cache)
 		return json.Unmarshal(jsonb, v)
