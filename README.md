@@ -8,7 +8,7 @@
 [![Tweet](https://img.shields.io/twitter/url/http/shields.io.svg?style=social)](https://twitter.com/intent/tweet?text=Lightweight+fast+and+deps+free+commented+json+parser+for+Golang&url=https://github.com/adhocore/jsonc&hashtags=go,golang,parser,json,json-comment)
 
 
-- Lightweight [JSON5](https://json5.org) pre-processor library for Go.
+- Lightweight [JSON5](https://json5.org) pre-processor library for Go. See [#1](https://github.com/adhocore/jsonc/issues/1)
 - Parses JSON5 input to JSON that Go understands. (Think of it as a superset to JSON.)
 - Makes possible to have comment in any form of JSON data.
 - Supported comments: single line `// comment` or multi line `/* comment */`.
